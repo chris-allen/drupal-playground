@@ -1,0 +1,13 @@
+name: drupal-test
+recipe: drupal8
+config:
+  webroot: .
+tooling:
+  drush:
+    service: appserver
+    cmd: drush --root=/app
+  phpunitcov:
+    service: appserver
+    env:
+      XDEBUG_MODE: coverage
+    cmd: ./vendor/bin/phpunit -c ./core --coverage-html htmlcov --whitelist modules/custom
