@@ -2,6 +2,11 @@ name: drupal-test
 recipe: drupal8
 config:
   webroot: .
+services:
+  phpmyadmin:
+    type: phpmyadmin
+    hosts:
+      - database
 tooling:
   drush:
     service: appserver
@@ -10,4 +15,4 @@ tooling:
     service: appserver
     env:
       XDEBUG_MODE: coverage
-    cmd: ./vendor/bin/phpunit -c ./core --coverage-html htmlcov --whitelist modules/custom
+    cmd: ./vendor/bin/phpunit -c ./core

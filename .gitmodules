@@ -1,3 +1,6 @@
 [submodule "modules/custom/layout_library"]
 	path = modules/custom/layout_library
 	url = git@git.drupal.org:issue/layout_library-3075067.git
+[submodule "modules/custom/pathauto"]
+	path = modules/custom/pathauto
+	url = git@git.drupal.org:issue/pathauto-2907491.git
