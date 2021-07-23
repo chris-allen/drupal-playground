@@ -1,0 +1,37 @@
+default:
+  autoload:
+    - '%paths.base%/tests/features/bootstrap'
+  suites:
+    default:
+      failure_path: '%paths.base%/tests/failures'
+      paths:
+        features: '%paths.base%/tests/features'
+      contexts:
+        - FailureContext
+        - FeatureContext
+        # Support BigPipe in Behat - https://github.com/jhedstrom/drupalextension/pull/325
+        # Modified to not require Drupal driver.
+        - BigPipeContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\MessageContext
+        - Drupal\DrupalExtension\Context\DrushContext
+  extensions:
+    Behat\MinkExtension:
+      # Default configuration has this commented out so it can be overidden.
+      base_url: https://drupal-test.lndo.site/
+      browser_name: chrome
+      sessions:
+        default:
+          goutte:
+            guzzle_parameters:
+              verify: false
+        javascript:
+          selenium2:
+            wd_host: http://chromedriver:4444/wd/hub
+    Drupal\DrupalExtension:
+      blackbox: ~
+      api_driver: 'drush'
+      drush:
+        alias: '@local'
+        binary: './bin/drush'

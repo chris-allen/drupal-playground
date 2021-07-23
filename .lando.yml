@@ -2,7 +2,21 @@ name: drupal-test
 recipe: drupal8
 config:
   webroot: .
+  via: nginx
+  xdebug: true
 services:
+  appserver:
+    overrides:
+      environment:
+        MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","chromeOptions":{"args":["--disable-gpu","--headless","--no-sandbox","--disable-dev-shm-usage"]}}, "http://chrome:9515"]'
+        SIMPLETEST_DB: 'mysql://drupal8:drupal8@database/drupal8'
+        SIMPLETEST_BASE_URL: 'http://drupal-test.lndo.site/'
+        BEHAT_PARAMS: '{"extensions" : {"Behat\\MinkExtension" : {"base_url" : "http://appserver/"}, "Drupal\\DrupalExtension" : {"drush" :   {  "root":  "/app" }}}}'
+  chrome:
+    type: compose
+    services:
+      image: drupalci/webdriver-chromedriver:production
+      command: chromedriver --log-path=/tmp/chromedriver.log --verbose --whitelisted-ips=
   phpmyadmin:
     type: phpmyadmin
     hosts:
@@ -11,8 +25,6 @@ tooling:
   drush:
     service: appserver
     cmd: drush --root=/app
-  phpunitcov:
+  test:
     service: appserver
-    env:
-      XDEBUG_MODE: coverage
-    cmd: ./vendor/bin/phpunit -c ./core
+    cmd: "php /app/vendor/bin/phpunit -c /app/phpunit.xml"
