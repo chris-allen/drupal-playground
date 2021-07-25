@@ -28,3 +28,8 @@ tooling:
   test:
     service: appserver
     cmd: "php /app/vendor/bin/phpunit -c /app/phpunit.xml"
+  testcov:
+    service: appserver
+    env:
+      XDEBUG_MODE: coverage
+    cmd: "php /app/vendor/bin/phpunit -c /app/phpunit.xml --coverage-html htmlcov --whitelist modules/custom"
